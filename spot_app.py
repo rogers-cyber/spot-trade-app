@@ -71,7 +71,11 @@ st.markdown(f"**Current Price:** ${current_price:.8f}")
 st.markdown(f"**Trend Direction:** {trend}")
 st.markdown(f"**Target Price (+{profit_pct:.2f}%):** ${target_price:.8f}")
 st.markdown(f"**Estimated Profit:** ${profit_est:.2f}")
-st.markdown(f"**Suggested Action:** HOLD {hold_pct}% (${hold_amt:.2f}), SELL {sell_pct}% (${sell_amt:.2f})")
+
+# ✅ Clean Suggested Action Output
+st.write("🧾 **Suggested Action**")
+st.write(f"• HOLD: {hold_pct}% (${hold_amt:.2f})")
+st.write(f"• SELL: {sell_pct}% (${sell_amt:.2f})")
 
 # --- Chart ---
 if show_plot:
