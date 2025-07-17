@@ -20,24 +20,28 @@ st.write(f"🔹 **Target Return:** {profit_pct:.2f}%")
 # --- Load Data Function ---
 @st.cache_data(ttl=300)
 def load_price_data(symbol, limit=200):
-    try:
-        url = "https://api.binance.com/api/v3/klines"
-        params = {'symbol': symbol, 'interval': '1h', 'limit': limit}
-        response = requests.get(url, params=params, timeout=10)
-        response.raise_for_status()
-        data = response.json()
-        if not isinstance(data, list) or len(data) == 0:
-            return pd.DataFrame()
-        df = pd.DataFrame(data, columns=[
-            'Time','Open','High','Low','Close','Volume','CloseTime',
-            'QAV','NumTrades','TBBase','TBQuote','Ignore'
-        ])
-        df['Time'] = pd.to_datetime(df['Time'], unit='ms')
-        df['Close'] = df['Close'].astype(float)
-        return df[['Time', 'Close']]
-    except Exception as e:
-        st.error(f"❌ Error fetching data for `{symbol}`: {e}")
-        return pd.DataFrame()
+    base_urls = [
+        "https://data.binance.com",
+        "https://api.binance.us"
+    ]
+    for base in base_urls:
+        try:
+            url = f"{base}/api/v3/klines"
+            params = {'symbol': symbol, 'interval': '1h', 'limit': limit}
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            if isinstance(data, list) and len(data) > 0:
+                df = pd.DataFrame(data, columns=[
+                    'Time', 'Open', 'High', 'Low', 'Close', 'Volume',
+                    'CloseTime', 'QAV', 'NumTrades', 'TBBase', 'TBQuote', 'Ignore'
+                ])
+                df['Time'] = pd.to_datetime(df['Time'], unit='ms')
+                df['Close'] = df['Close'].astype(float)
+                return df[['Time', 'Close']]
+        except Exception:
+            continue
+    return pd.DataFrame()
 
 # --- Load and Analyze ---
 df = load_price_data(symbol)
