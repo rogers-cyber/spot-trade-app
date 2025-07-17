@@ -67,11 +67,13 @@ sell_amt = investment * sell_pct / 100
 
 # --- Output Summary ---
 st.subheader("📊 Simulation Results")
-st.markdown(f"**Current Price:** `${current_price:.8f}`")
-st.markdown(f"**Trend Direction:** `{trend}`")
-st.markdown(f"**Target Price (+{profit_pct:.2f}%):** `${target_price:.8f}`")
-st.markdown(f"**Estimated Profit:** `${profit_est:.2f}`")
-st.markdown(f"**Suggested Action:** HOLD **{hold_pct}%** (${hold_amt:.2f}), SELL **{sell_pct}%** (${sell_amt:.2f})")
+st.markdown(f"**💲 Current Price:** `${current_price:.8f}`")
+st.markdown(f"**📈 Trend Direction:** `{trend}`")
+st.markdown(f"**🎯 Target Price (+{profit_pct:.2f}%):** `${target_price:.8f}`")
+st.markdown(f"**💰 Estimated Profit:** `${profit_est:.2f}`")
+st.markdown(
+    f"**🧾 Suggested Action:** HOLD **{hold_pct}%** (${hold_amt:.2f}), SELL **{sell_pct}%** (${sell_amt:.2f})"
+)
 
 # --- Chart ---
 if show_plot:
@@ -83,6 +85,25 @@ if show_plot:
     ax.legend()
     ax.grid(True)
     st.pyplot(fig)
+
+# --- Optional: Export Trade Suggestion as CSV ---
+csv_data = pd.DataFrame([{
+    "Symbol": symbol,
+    "Current Price": current_price,
+    "Trend": trend,
+    "Target Price": target_price,
+    "Estimated Profit": profit_est,
+    "HOLD %": hold_pct,
+    "HOLD Amount": hold_amt,
+    "SELL %": sell_pct,
+    "SELL Amount": sell_amt
+}])
+st.download_button(
+    label="📥 Download Trade Suggestion as CSV",
+    data=csv_data.to_csv(index=False),
+    file_name=f"{symbol}_trade_suggestion.csv",
+    mime="text/csv"
+)
 
 # --- Donation Section ---
 st.markdown("---")
