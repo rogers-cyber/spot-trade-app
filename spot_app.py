@@ -9,8 +9,8 @@ st.title("📈 Spot Trade Simulator")
 
 # --- User Inputs ---
 symbol = st.sidebar.text_input("Coin symbol", value="PEPEUSDT").upper()
-investment = st.sidebar.number_input("Investment (USDT)", value=20.0, min_value=1.0)
-profit_pct = st.sidebar.number_input("Profit target (%)", value=2.0, min_value=0.1)
+investment = st.sidebar.number_input("Investment (USDT)", value=100.0, min_value=1.0)
+profit_pct = st.sidebar.number_input("Profit target (%)", value=10.0, min_value=0.1)
 show_plot = st.sidebar.checkbox("Show Price Chart", value=True)
 
 st.write(f"### Simulation for {symbol}")
